@@ -1,0 +1,34 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Criminoso {
+  id             Int      @id @default(autoincrement())
+  nome           String
+  dataNascimento DateTime
+  crimes         Crime[]
+}
+
+model Crime {
+  id          Int       @id @default(autoincrement())
+  descricao   String
+  data        DateTime
+  localizacao String
+  criminosoId Int
+  criminoso   Criminoso @relation(fields: [criminosoId], references: [id])
+  armas       Arma[]
+}
+
+model Arma {
+  id          Int    @id @default(autoincrement())
+  tipo        String
+  modelo      String
+  numeroSerie String
+  crimeId     Int
+  crime       Crime  @relation(fields: [crimeId], references: [id])
+}
